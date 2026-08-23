@@ -57,6 +57,7 @@
         </video>
         <div class="hero-video-shade" aria-hidden="true"></div>
         <div class="hero-caption" data-i18n="heroCaption">From Tehran roots to Mediterranean light.</div>
+        <button class="video-toggle" id="videoToggle" type="button" aria-pressed="false" data-i18n="pauseVideo">Pause video</button>
       </div>
     </section>
 
@@ -120,10 +121,10 @@
           <p class="section-subtitle" data-i18n="shopSubtitle">Explore the first Shervinah Universal collections. Online checkout will be connected later.</p>
         </div>
         <div class="shop-category-grid">
-          <a class="shop-category oils reveal" href="#" aria-label="Oils"><span>01</span><h3 data-i18n="catOils">Oils</h3><p data-i18n="catOilsText">Ritual blends inspired by saffron, memory and intention.</p></a>
-          <a class="shop-category merch reveal" href="#" aria-label="Shervinah Universal merchandise"><span>02</span><h3 data-i18n="catMerch">Shervinah Universal Merchandise</h3><p data-i18n="catMerchText">Modern pieces carrying the new identity.</p></a>
-          <a class="shop-category souvenirs reveal" href="#" aria-label="Souvenirs from Israel"><span>03</span><h3 data-i18n="catSouvenirs">Souvenirs from Israel</h3><p data-i18n="catSouvenirsText">Meaningful memories from places and stories.</p></a>
-          <a class="shop-category jewelry reveal" href="#" aria-label="Jewelry"><span>04</span><h3 data-i18n="catJewelry">Jewelry</h3><p data-i18n="catJewelryText">Symbols of heritage, connection and protection.</p></a>
+          <article class="shop-category oils reveal" aria-label="Oils"><span>01</span><h3 data-i18n="catOils">Oils</h3><p data-i18n="catOilsText">Ritual blends inspired by saffron, memory and intention.</p></article>
+          <article class="shop-category merch reveal" aria-label="Shervinah Universal merchandise"><span>02</span><h3 data-i18n="catMerch">Shervinah Universal Merchandise</h3><p data-i18n="catMerchText">Modern pieces carrying the new identity.</p></article>
+          <article class="shop-category souvenirs reveal" aria-label="Souvenirs from Israel"><span>03</span><h3 data-i18n="catSouvenirs">Souvenirs from Israel</h3><p data-i18n="catSouvenirsText">Meaningful memories from places and stories.</p></article>
+          <article class="shop-category jewelry reveal" aria-label="Jewelry"><span>04</span><h3 data-i18n="catJewelry">Jewelry</h3><p data-i18n="catJewelryText">Symbols of heritage, connection and protection.</p></article>
         </div>
       </div>
     </section>
@@ -177,7 +178,7 @@
     <div class="section-shell footer-bottom"><p>© <span id="year"></span> Shervinah Universal</p><p data-i18n="rights">All rights reserved.</p></div>
   </footer>
 
-  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="cart-header"><h2 data-i18n="cartTitle">Your cart</h2><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><p data-i18n="demoCheckout">Demo mode — checkout will be connected later.</p><button class="button button-primary" disabled data-i18n="checkout">Checkout</button></div></aside>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cartTitleHeading"><div class="cart-header"><h2 id="cartTitleHeading" data-i18n="cartTitle">Your cart</h2><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><p data-i18n="demoCheckout">Demo mode — checkout will be connected later.</p><button class="button button-primary" disabled data-i18n="checkout">Checkout</button></div></aside>
   <div class="cart-backdrop" id="cartBackdrop"></div>
 
   <button class="accessibility-toggle" id="accessibilityToggle" aria-controls="accessibilityPanel" aria-expanded="false"><span aria-hidden="true">♿</span><span data-i18n="a11yButton">Accessibility</span></button>
