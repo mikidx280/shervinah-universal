@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Shervinah Universal — Discover Israel through stories, culture and curated collections." />
+  <title>Shervinah Universal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Shervinah Universal home">
+      <span class="brand-mark">SU</span>
+      <span class="brand-copy"><strong>SHERVINAH</strong><small>UNIVERSAL</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#story" data-i18n="nav_story">Story</a>
+      <a href="#explore" data-i18n="nav_explore">Explore Israel</a>
+      <a href="#shop" data-i18n="nav_shop">Shop</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+    </nav>
+    <div class="header-actions">
+      <button id="langToggle" class="lang-btn" aria-label="Switch language">فارسی</button>
+      <button id="cartButton" class="cart-btn" aria-label="Open cart"><span data-i18n="cart">Cart</span><span id="cartCount" class="cart-count">0</span></button>
+      <button id="menuButton" class="menu-btn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg hero-bg-1"></div><div class="hero-bg hero-bg-2"></div>
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="hero_eyebrow">ISRAEL • CULTURE • STORIES • SHOP</p>
+        <h1 data-i18n="hero_title">Discover Israel<br>with Shervinah.</h1>
+        <p class="hero-lead" data-i18n="hero_lead">A personal window into the places, people, culture and everyday life of Israel — told in Persian and English.</p>
+        <div class="hero-cta"><a class="btn btn-primary" href="#explore" data-i18n="explore_btn">Explore Israel</a><a class="btn btn-ghost" href="#shop" data-i18n="shop_btn">Shop the Collection</a></div>
+      </div>
+      <div class="hero-card"><span class="pin">●</span><span data-i18n="hero_card">From Tel Aviv to Jaffa, Haifa, Jerusalem and beyond.</span></div>
+    </section>
+
+    <section id="story" class="section story-section">
+      <div class="section-kicker" data-i18n="story_kicker">THE STORY</div>
+      <div class="story-grid"><div><h2 data-i18n="story_title">Born in Iran.<br>Living in Israel.<br>Sharing what I see.</h2></div><div class="story-copy"><p data-i18n="story_p1">Shervinah Universal was created to share Israel through real moments: beaches, streets, markets, food, traditions, people and the rhythm of everyday life.</p><p data-i18n="story_p2">It is also a home for original collections and souvenirs inspired by the places and stories featured along the journey.</p><a href="#about" class="text-link" data-i18n="read_story">Read Shervinah's story →</a></div></div>
+    </section>
+
+    <section id="explore" class="section explore-section">
+      <div class="section-heading"><div><div class="section-kicker" data-i18n="explore_kicker">EXPLORE ISRAEL</div><h2 data-i18n="explore_title">Places with a story.</h2></div><p data-i18n="explore_intro">Travel through Israel in short, visual stories — from Mediterranean mornings to ancient alleys and modern city life.</p></div>
+      <div class="destination-grid">
+        <article class="destination-card telaviv"><div class="destination-content"><span>01</span><h3 data-i18n="telaviv">Tel Aviv</h3><p data-i18n="telaviv_desc">Sea, movement, cafés and city energy.</p></div></article>
+        <article class="destination-card jaffa"><div class="destination-content"><span>02</span><h3 data-i18n="jaffa">Jaffa</h3><p data-i18n="jaffa_desc">Old stones, port stories and mixed cultures.</p></div></article>
+        <article class="destination-card haifa"><div class="destination-content"><span>03</span><h3 data-i18n="haifa">Haifa</h3><p data-i18n="haifa_desc">Mountain, sea and layered communities.</p></div></article>
+        <article class="destination-card jerusalem"><div class="destination-content"><span>04</span><h3 data-i18n="jerusalem">Jerusalem</h3><p data-i18n="jerusalem_desc">History, faith, markets and contrasts.</p></div></article>
+      </div>
+    </section>
+
+    <section id="shop" class="section shop-section"><div class="section-heading"><div><div class="section-kicker" data-i18n="shop_kicker">THE SHOP</div><h2 data-i18n="shop_title">Take a piece of the story with you.</h2></div><p data-i18n="shop_intro">Curated souvenirs and Shervinah merchandise inspired by Israel, travel and the stories behind each destination.</p></div><div id="productGrid" class="product-grid"></div></section>
+
+    <section class="section split-banner"><div class="banner-copy"><div class="section-kicker light" data-i18n="persian_kicker">PERSIAN × ISRAELI</div><h2 data-i18n="persian_title">Two cultures.<br>One creative collection.</h2><p data-i18n="persian_desc">Limited designs inspired by Persian language, Israeli landscapes and Shervinah's personal journey.</p><a href="#shop" class="btn btn-light" data-i18n="coming_soon">Collection coming soon</a></div><div class="banner-art" aria-hidden="true"><div class="sun"></div><div class="line l1"></div><div class="line l2"></div><div class="line l3"></div></div></section>
+
+    <section id="about" class="section about-section"><div class="about-card"><div class="portrait-placeholder"><span>SHERVINAH</span><small data-i18n="portrait_note">Founder • Creator • Storyteller</small></div><div class="about-copy"><div class="section-kicker" data-i18n="about_kicker">ABOUT SHERVINAH</div><h2 data-i18n="about_title">A personal bridge through culture and curiosity.</h2><p data-i18n="about_text">Shervinah Universal is an independent creator brand built around storytelling, travel, culture and original products. The goal is simple: show everyday Israel in a human, visual and accessible way — in Persian and English.</p><div class="about-points"><span data-i18n="about_point1">Persian-first storytelling</span><span data-i18n="about_point2">Original Israel content</span><span data-i18n="about_point3">Curated merchandise</span></div></div></div></section>
+
+    <section class="section newsletter-section"><div><div class="section-kicker light" data-i18n="newsletter_kicker">JOIN THE JOURNEY</div><h2 data-i18n="newsletter_title">New stories, drops and places — straight to your inbox.</h2></div><form id="newsletterForm" class="newsletter-form"><input type="email" required placeholder="Email address" data-i18n-placeholder="email_placeholder" /><button class="btn btn-light" type="submit" data-i18n="join_btn">Join</button></form><p id="newsletterMessage" class="form-message"></p></section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-brand"><strong>SHERVINAH UNIVERSAL</strong><span data-i18n="footer_tag">Discover • Connect • Take the story home</span></div><div class="footer-links"><a href="#explore" data-i18n="nav_explore">Explore Israel</a><a href="#shop" data-i18n="nav_shop">Shop</a><a href="#about" data-i18n="nav_about">About</a><a href="mailto:shervinah55@gmail.com" data-i18n="collab">Collaborations</a></div><small>© 2026 Shervinah Universal. All rights reserved.</small></footer>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true"><div class="cart-head"><h3 data-i18n="your_cart">Your cart</h3><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><div class="cart-total"><span data-i18n="total">Total</span><strong id="cartTotal">$0</strong></div><button id="checkoutButton" class="btn btn-primary full" data-i18n="checkout">Checkout</button><small data-i18n="checkout_note">Secure checkout will be connected with your payment provider.</small></div></aside>
+  <div id="overlay" class="overlay"></div>
+  <script src="app.js"></script>
+</body>
+</html>
