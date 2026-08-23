@@ -2,73 +2,141 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Shervinah Universal — Discover Israel through stories, culture and curated collections." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Shervinah Universal — Persian soul, Israeli spirit, stories, culture and meaningful creations." />
   <title>Shervinah Universal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="announcement" data-i18n="announcement">Discover Israel through culture, beauty and soul.</div>
+
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Shervinah Universal home">
-      <span class="brand-mark">SU</span>
+      <span class="brand-mark">S</span>
       <span class="brand-copy"><strong>SHERVINAH</strong><small>UNIVERSAL</small></span>
     </a>
-    <nav class="nav" aria-label="Primary navigation">
-      <a href="#story" data-i18n="nav_story">Story</a>
-      <a href="#explore" data-i18n="nav_explore">Explore Israel</a>
-      <a href="#shop" data-i18n="nav_shop">Shop</a>
-      <a href="#about" data-i18n="nav_about">About</a>
+
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#story" data-i18n="navStory">Story</a>
+      <a href="#israel" data-i18n="navIsrael">Israel</a>
+      <a href="#shop" data-i18n="navShop">Shop</a>
+      <a href="#collaborate" data-i18n="navCollaborate">Collaborate</a>
     </nav>
+
     <div class="header-actions">
-      <button id="langToggle" class="lang-btn" aria-label="Switch language">فارسی</button>
-      <button id="cartButton" class="cart-btn" aria-label="Open cart"><span data-i18n="cart">Cart</span><span id="cartCount" class="cart-count">0</span></button>
-      <button id="menuButton" class="menu-btn" aria-label="Open menu">☰</button>
+      <div class="language-switch" aria-label="Language switcher">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fa">فارسی</button>
+      </div>
+      <button class="cart-button" id="cartButton" aria-label="Shopping cart">
+        <span data-i18n="cart">Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
     </div>
   </header>
 
   <main id="top">
-    <section class="hero">
-      <div class="hero-bg hero-bg-1"></div><div class="hero-bg hero-bg-2"></div>
-      <div class="hero-content">
-        <p class="eyebrow" data-i18n="hero_eyebrow">ISRAEL • CULTURE • STORIES • SHOP</p>
-        <h1 data-i18n="hero_title">Discover Israel<br>with Shervinah.</h1>
-        <p class="hero-lead" data-i18n="hero_lead">A personal window into the places, people, culture and everyday life of Israel — told in Persian and English.</p>
-        <div class="hero-cta"><a class="btn btn-primary" href="#explore" data-i18n="explore_btn">Explore Israel</a><a class="btn btn-ghost" href="#shop" data-i18n="shop_btn">Shop the Collection</a></div>
+    <section class="hero section-shell">
+      <div class="hero-copy reveal">
+        <p class="eyebrow" data-i18n="heroEyebrow">PERSIAN SOUL · ISRAELI SPIRIT</p>
+        <h1 data-i18n="heroTitle">A journey between roots, beauty and belonging.</h1>
+        <p class="hero-text" data-i18n="heroText">Shervinah brings together Persian heritage and the living colors of Israel — through stories, places, people and soulful creations.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#israel" data-i18n="exploreIsrael">Explore Israel</a>
+          <a class="button button-ghost" href="#shop" data-i18n="discoverShop">Discover the shop</a>
+        </div>
       </div>
-      <div class="hero-card"><span class="pin">●</span><span data-i18n="hero_card">From Tel Aviv to Jaffa, Haifa, Jerusalem and beyond.</span></div>
-    </section>
 
-    <section id="story" class="section story-section">
-      <div class="section-kicker" data-i18n="story_kicker">THE STORY</div>
-      <div class="story-grid"><div><h2 data-i18n="story_title">Born in Iran.<br>Living in Israel.<br>Sharing what I see.</h2></div><div class="story-copy"><p data-i18n="story_p1">Shervinah Universal was created to share Israel through real moments: beaches, streets, markets, food, traditions, people and the rhythm of everyday life.</p><p data-i18n="story_p2">It is also a home for original collections and souvenirs inspired by the places and stories featured along the journey.</p><a href="#about" class="text-link" data-i18n="read_story">Read Shervinah's story →</a></div></div>
-    </section>
-
-    <section id="explore" class="section explore-section">
-      <div class="section-heading"><div><div class="section-kicker" data-i18n="explore_kicker">EXPLORE ISRAEL</div><h2 data-i18n="explore_title">Places with a story.</h2></div><p data-i18n="explore_intro">Travel through Israel in short, visual stories — from Mediterranean mornings to ancient alleys and modern city life.</p></div>
-      <div class="destination-grid">
-        <article class="destination-card telaviv"><div class="destination-content"><span>01</span><h3 data-i18n="telaviv">Tel Aviv</h3><p data-i18n="telaviv_desc">Sea, movement, cafés and city energy.</p></div></article>
-        <article class="destination-card jaffa"><div class="destination-content"><span>02</span><h3 data-i18n="jaffa">Jaffa</h3><p data-i18n="jaffa_desc">Old stones, port stories and mixed cultures.</p></div></article>
-        <article class="destination-card haifa"><div class="destination-content"><span>03</span><h3 data-i18n="haifa">Haifa</h3><p data-i18n="haifa_desc">Mountain, sea and layered communities.</p></div></article>
-        <article class="destination-card jerusalem"><div class="destination-content"><span>04</span><h3 data-i18n="jerusalem">Jerusalem</h3><p data-i18n="jerusalem_desc">History, faith, markets and contrasts.</p></div></article>
+      <div class="hero-art reveal" aria-label="Decorative Persian and Mediterranean inspired artwork">
+        <div class="sun-disc"></div>
+        <div class="arch arch-one"></div>
+        <div class="arch arch-two"></div>
+        <div class="tile-pattern"></div>
+        <div class="hero-caption" data-i18n="heroCaption">From Tehran roots to Mediterranean light.</div>
       </div>
     </section>
 
-    <section id="shop" class="section shop-section"><div class="section-heading"><div><div class="section-kicker" data-i18n="shop_kicker">THE SHOP</div><h2 data-i18n="shop_title">Take a piece of the story with you.</h2></div><p data-i18n="shop_intro">Curated souvenirs and Shervinah merchandise inspired by Israel, travel and the stories behind each destination.</p></div><div id="productGrid" class="product-grid"></div></section>
+    <section class="manifesto full-bleed">
+      <div class="manifesto-inner section-shell reveal">
+        <p data-i18n="manifesto">Not a travel guide. Not only a shop. A personal window into a place where ancient cultures, modern life and human stories meet.</p>
+      </div>
+    </section>
 
-    <section class="section split-banner"><div class="banner-copy"><div class="section-kicker light" data-i18n="persian_kicker">PERSIAN × ISRAELI</div><h2 data-i18n="persian_title">Two cultures.<br>One creative collection.</h2><p data-i18n="persian_desc">Limited designs inspired by Persian language, Israeli landscapes and Shervinah's personal journey.</p><a href="#shop" class="btn btn-light" data-i18n="coming_soon">Collection coming soon</a></div><div class="banner-art" aria-hidden="true"><div class="sun"></div><div class="line l1"></div><div class="line l2"></div><div class="line l3"></div></div></section>
+    <section id="story" class="story section-shell section-pad">
+      <div class="section-heading reveal">
+        <p class="eyebrow" data-i18n="storyEyebrow">THE STORY</p>
+        <h2 data-i18n="storyTitle">Two cultures. One voice.</h2>
+      </div>
+      <div class="story-grid">
+        <div class="story-visual reveal">
+          <div class="portrait-frame">
+            <span data-i18n="portraitPlaceholder">Your portrait / video goes here</span>
+          </div>
+        </div>
+        <div class="story-copy reveal">
+          <p data-i18n="storyP1">Shervinah’s world is shaped by Persian memory and Israeli everyday life. Her work is about seeing beyond headlines — into food, language, streets, rituals, art, music and the small moments that make a place feel human.</p>
+          <p data-i18n="storyP2">This space was created for curiosity: to discover Israel through beauty and culture, while keeping a deep connection to Persian identity and heritage.</p>
+          <div class="signature">Shervinah</div>
+        </div>
+      </div>
+    </section>
 
-    <section id="about" class="section about-section"><div class="about-card"><div class="portrait-placeholder"><span>SHERVINAH</span><small data-i18n="portrait_note">Founder • Creator • Storyteller</small></div><div class="about-copy"><div class="section-kicker" data-i18n="about_kicker">ABOUT SHERVINAH</div><h2 data-i18n="about_title">A personal bridge through culture and curiosity.</h2><p data-i18n="about_text">Shervinah Universal is an independent creator brand built around storytelling, travel, culture and original products. The goal is simple: show everyday Israel in a human, visual and accessible way — in Persian and English.</p><div class="about-points"><span data-i18n="about_point1">Persian-first storytelling</span><span data-i18n="about_point2">Original Israel content</span><span data-i18n="about_point3">Curated merchandise</span></div></div></div></section>
+    <section id="israel" class="destinations section-pad">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow" data-i18n="israelEyebrow">DISCOVER ISRAEL</p>
+          <h2 data-i18n="israelTitle">Four places. Four different energies.</h2>
+          <p class="section-subtitle" data-i18n="israelSubtitle">Stories from cities where sea, history, faith, art and everyday life overlap.</p>
+        </div>
 
-    <section class="section newsletter-section"><div><div class="section-kicker light" data-i18n="newsletter_kicker">JOIN THE JOURNEY</div><h2 data-i18n="newsletter_title">New stories, drops and places — straight to your inbox.</h2></div><form id="newsletterForm" class="newsletter-form"><input type="email" required placeholder="Email address" data-i18n-placeholder="email_placeholder" /><button class="btn btn-light" type="submit" data-i18n="join_btn">Join</button></form><p id="newsletterMessage" class="form-message"></p></section>
+        <div class="destination-grid">
+          <article class="destination-card telaviv reveal"><div class="destination-number">01</div><div class="destination-content"><h3 data-i18n="telavivTitle">Tel Aviv</h3><p data-i18n="telavivText">Sea air, movement, cafés, sport and a city that rarely stands still.</p></div></article>
+          <article class="destination-card jaffa reveal"><div class="destination-number">02</div><div class="destination-content"><h3 data-i18n="jaffaTitle">Jaffa</h3><p data-i18n="jaffaText">Stone alleys, old port stories and cultures living side by side.</p></div></article>
+          <article class="destination-card haifa reveal"><div class="destination-number">03</div><div class="destination-content"><h3 data-i18n="haifaTitle">Haifa</h3><p data-i18n="haifaText">Mountain, sea and a layered city shaped by many communities.</p></div></article>
+          <article class="destination-card jerusalem reveal"><div class="destination-number">04</div><div class="destination-content"><h3 data-i18n="jerusalemTitle">Jerusalem</h3><p data-i18n="jerusalemText">Ancient stone, sacred spaces and a city full of memory.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="shop" class="shop section-shell section-pad">
+      <div class="section-heading reveal">
+        <p class="eyebrow" data-i18n="shopEyebrow">THE SHOP</p>
+        <h2 data-i18n="shopTitle">Meaningful objects for the soul.</h2>
+        <p class="section-subtitle" data-i18n="shopSubtitle">A first collection inspired by Shervinah’s spiritual work. Checkout is intentionally kept in demo mode for now.</p>
+      </div>
+
+      <div class="product-grid">
+        <article class="product-card reveal"><div class="product-art saffron"><span>01</span></div><div class="product-info"><p class="product-type" data-i18n="productTypeRitual">Ritual</p><h3 data-i18n="saffronTitle">Saffron Soul Oil</h3><p data-i18n="saffronText">A symbolic ritual oil inspired by saffron, memory and intention.</p><button class="add-to-cart" data-product="Saffron Soul Oil" data-i18n="addToCart">Add to cart</button></div></article>
+        <article class="product-card reveal"><div class="product-art cards"><span>02</span></div><div class="product-info"><p class="product-type" data-i18n="productTypeCards">Cards</p><h3 data-i18n="cardsTitle">Messages from the Angels</h3><p data-i18n="cardsText">A deck created for daily reflection, guidance and intuitive practice.</p><button class="add-to-cart" data-product="Messages from the Angels" data-i18n="addToCart">Add to cart</button></div></article>
+        <article class="product-card reveal"><div class="product-art book"><span>03</span></div><div class="product-info"><p class="product-type" data-i18n="productTypeBook">Book</p><h3 data-i18n="bookTitle">Angel Numbers</h3><p data-i18n="bookText">A book exploring the symbolic language of repeating numbers.</p><button class="add-to-cart" data-product="Angel Numbers" data-i18n="addToCart">Add to cart</button></div></article>
+      </div>
+    </section>
+
+    <section id="collaborate" class="collaboration full-bleed">
+      <div class="section-shell collaboration-inner reveal">
+        <div><p class="eyebrow light" data-i18n="collabEyebrow">COLLABORATIONS</p><h2 data-i18n="collabTitle">Let’s create something people will remember.</h2></div>
+        <div class="collab-copy"><p data-i18n="collabText">Tourism, culture, lifestyle, hospitality, products and meaningful brand collaborations are welcome.</p><a class="button button-light" href="mailto:shervinah55@gmail.com" data-i18n="collabButton">Start a collaboration</a></div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section-shell section-pad">
+      <div class="contact-card reveal">
+        <div><p class="eyebrow" data-i18n="contactEyebrow">STAY CONNECTED</p><h2 data-i18n="contactTitle">Stories worth opening your inbox for.</h2><p data-i18n="contactText">Join for new stories, destinations, products and behind-the-scenes moments.</p></div>
+        <form class="newsletter" id="newsletterForm"><input type="email" id="newsletterEmail" required placeholder="Email address" data-i18n-placeholder="emailPlaceholder" /><button class="button button-primary" type="submit" data-i18n="joinButton">Join</button><p class="form-message" id="formMessage" aria-live="polite"></p></form>
+      </div>
+    </section>
   </main>
 
-  <footer class="site-footer"><div class="footer-brand"><strong>SHERVINAH UNIVERSAL</strong><span data-i18n="footer_tag">Discover • Connect • Take the story home</span></div><div class="footer-links"><a href="#explore" data-i18n="nav_explore">Explore Israel</a><a href="#shop" data-i18n="nav_shop">Shop</a><a href="#about" data-i18n="nav_about">About</a><a href="mailto:shervinah55@gmail.com" data-i18n="collab">Collaborations</a></div><small>© 2026 Shervinah Universal. All rights reserved.</small></footer>
+  <footer class="site-footer">
+    <div class="section-shell footer-inner"><div class="brand footer-brand"><span class="brand-mark">S</span><span class="brand-copy"><strong>SHERVINAH</strong><small>UNIVERSAL</small></span></div><p data-i18n="footerTagline">Persian heritage · Israeli beauty · One soulful journey.</p><p class="copyright">© <span id="year"></span> Shervinah Universal</p></div>
+  </footer>
 
-  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true"><div class="cart-head"><h3 data-i18n="your_cart">Your cart</h3><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><div class="cart-total"><span data-i18n="total">Total</span><strong id="cartTotal">$0</strong></div><button id="checkoutButton" class="btn btn-primary full" data-i18n="checkout">Checkout</button><small data-i18n="checkout_note">Secure checkout will be connected with your payment provider.</small></div></aside>
-  <div id="overlay" class="overlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="cart-header"><h2 data-i18n="cartTitle">Your cart</h2><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><p data-i18n="demoCheckout">Demo mode — checkout will be connected later.</p><button class="button button-primary" disabled data-i18n="checkout">Checkout</button></div></aside>
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+
   <script src="app.js"></script>
 </body>
 </html>
