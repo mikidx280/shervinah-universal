@@ -32,3 +32,6 @@ body.a11y-contrast{background:#000!important;color:#fff!important}body.a11y-cont
 :focus-visible{outline:3px solid #006cff;outline-offset:4px}
 @media(max-width:980px){.gateway-grid{grid-template-columns:1fr}.gateway-card{min-height:250px}.shop-category-grid{grid-template-columns:repeat(2,1fr)}.footer-columns{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.shop-category-grid,.footer-columns{grid-template-columns:1fr}.shop-category{min-height:270px}.footer-brand-row,.footer-bottom{align-items:flex-start;flex-direction:column}.accessibility-toggle{left:12px;bottom:12px}.accessibility-panel{left:12px;bottom:66px}}
+
+.social-links svg{width:22px;height:22px;display:block}.social-links a{transition:transform .2s,background .2s}.social-links a:hover,.social-links a:focus{transform:translateY(-2px);background:#ff1020;color:#fff;text-decoration:none}
+.accessibility-panel.open{grid-template-columns:1fr 1fr}.accessibility-panel .accessibility-head,.accessibility-panel>a{grid-column:1/-1}.accessibility-panel>button{min-height:54px;text-align:center!important}.accessibility-panel>button.active{background:var(--gold-light);color:var(--black)}
