@@ -92,3 +92,10 @@ body.a11y-spacing main{letter-spacing:.12em;word-spacing:.18em}body.a11y-line-he
 .social-icon-button svg{width:27px;height:27px}
 .social-icon-button:hover,.social-icon-button:focus-visible{transform:translateY(-3px);background:var(--red);color:#fff;box-shadow:5px 7px 0 var(--black);outline:3px solid var(--gold-light);outline-offset:3px}
 .social-links svg{width:21px;height:21px}
+
+
+/* Shervinah editorial photography */
+.topic-feature-photo{margin:clamp(2rem,5vw,4rem) 0 0;max-width:760px}
+.topic-feature-photo img{display:block;width:100%;max-height:720px;object-fit:cover;object-position:center 28%;border:1px solid rgba(7,7,6,.3);box-shadow:18px 18px 0 var(--red)}
+.community-photo img{object-position:center 22%}
+@media(max-width:640px){.topic-feature-photo img{max-height:560px;box-shadow:10px 10px 0 var(--red)}}
