@@ -180,18 +180,27 @@
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="cart-header"><h2 data-i18n="cartTitle">Your cart</h2><button id="closeCart" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><p data-i18n="demoCheckout">Demo mode — checkout will be connected later.</p><button class="button button-primary" disabled data-i18n="checkout">Checkout</button></div></aside>
   <div class="cart-backdrop" id="cartBackdrop"></div>
 
-  <button class="accessibility-toggle" id="accessibilityToggle" aria-controls="accessibilityPanel" aria-expanded="false"><span aria-hidden="true">◉</span><span data-i18n="a11yButton">Accessibility</span></button>
-  <aside class="accessibility-panel" id="accessibilityPanel" aria-hidden="true">
-    <div class="accessibility-head"><h2 data-i18n="a11yTitle">Accessibility</h2><button id="accessibilityClose" aria-label="Close">×</button></div>
-    <button data-a11y="font-up" data-i18n="a11yFontUp">Increase text</button>
-    <button data-a11y="font-down" data-i18n="a11yFontDown">Decrease text</button>
-    <button data-a11y="contrast" data-i18n="a11yContrast">High contrast</button>
-    <button data-a11y="grayscale" data-i18n="a11yGray">Grayscale</button>
-    <button data-a11y="links" data-i18n="a11yLinks">Highlight links</button>
-    <button data-a11y="motion" data-i18n="a11yMotion">Stop animations</button>
-    <button data-a11y="cursor" data-i18n="a11yCursor">Large cursor</button>
-    <button data-a11y="reset" data-i18n="a11yReset">Reset</button>
+  <button class="accessibility-toggle" id="accessibilityToggle" aria-controls="accessibilityPanel" aria-expanded="false"><span aria-hidden="true">♿</span><span data-i18n="a11yButton">Accessibility</span></button>
+  <aside class="accessibility-panel" id="accessibilityPanel" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="a11yHeading">
+    <div class="accessibility-head"><h2 id="a11yHeading" data-i18n="a11yTitle">Accessibility</h2><button id="accessibilityClose" aria-label="Close">×</button></div>
+    <p class="a11y-shortcut" data-i18n="a11yShortcut">Shortcut: Alt + A</p>
+    <button data-a11y="font-up"><span aria-hidden="true">T+</span><span data-i18n="a11yFontUp">Increase text</span></button>
+    <button data-a11y="font-down"><span aria-hidden="true">T−</span><span data-i18n="a11yFontDown">Decrease text</span></button>
+    <button data-a11y="contrast"><span aria-hidden="true">◐</span><span data-i18n="a11yContrast">High contrast</span></button>
+    <button data-a11y="grayscale"><span aria-hidden="true">◑</span><span data-i18n="a11yGray">Grayscale</span></button>
+    <button data-a11y="links"><span aria-hidden="true">🔗</span><span data-i18n="a11yLinks">Highlight links</span></button>
+    <button data-a11y="spacing"><span aria-hidden="true">↔</span><span data-i18n="a11ySpacing">Text spacing</span></button>
+    <button data-a11y="line-height"><span aria-hidden="true">↕</span><span data-i18n="a11yLineHeight">Line height</span></button>
+    <button data-a11y="readable"><span aria-hidden="true">Aa</span><span data-i18n="a11yReadable">Readable font</span></button>
+    <button data-a11y="images"><span aria-hidden="true">▧</span><span data-i18n="a11yImages">Hide images</span></button>
+    <button data-a11y="motion"><span aria-hidden="true">Ⅱ</span><span data-i18n="a11yMotion">Stop animations</span></button>
+    <button data-a11y="cursor"><span aria-hidden="true">➤</span><span data-i18n="a11yCursor">Large cursor</span></button>
+    <button data-a11y="guide"><span aria-hidden="true">━</span><span data-i18n="a11yGuide">Reading guide</span></button>
+    <button data-a11y="align"><span aria-hidden="true">☰</span><span data-i18n="a11yAlign">Align text</span></button>
+    <button class="a11y-reset" data-a11y="reset"><span aria-hidden="true">↺</span><span data-i18n="a11yReset">Reset all</span></button>
     <a href="accessibility.html" data-i18n="accessibility">Accessibility statement</a>
+    <div class="reading-guide" id="readingGuide" aria-hidden="true"></div>
+    <div class="sr-only" id="a11yStatus" aria-live="polite"></div>
   </aside>
 
   <script src="app.js?v=universal-layout-3"></script>
