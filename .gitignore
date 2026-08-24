@@ -1,0 +1,22 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Local secrets / config (lives outside the web root in production, but never commit a local copy either)
+private-config.php
+
+# Logs
+*.log
+
+# Future build tooling (Node-based bundlers, if introduced later)
+node_modules/
+dist/
+build/
+.env
+.env.local

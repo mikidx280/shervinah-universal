@@ -16,6 +16,7 @@ const ui={en:{story:'Story',israel:'Israel',shop:'Shop',collaborate:'Collaborate
 const related=['jerusalem','coast','numerology','kabbalah','healing','mission','collaborate'];
 let lang=localStorage.getItem('su-lang')||'en';
 const params=new URLSearchParams(location.search);const requestedTopic=params.get('topic');if(requestedTopic==='courses'){location.replace('course.html');}const key=topics[requestedTopic]?requestedTopic:'jerusalem';
+const topicEyebrow=document.getElementById('topicEyebrow'),topicTitle=document.getElementById('topicTitle'),topicLead=document.getElementById('topicLead'),topicCta=document.getElementById('topicCta'),topicContent=document.getElementById('topicContent'),relatedLinks=document.getElementById('relatedLinks'),accessibilityToggle=document.getElementById('accessibilityToggle');
 function render(){
  const t=topics[key][lang];document.documentElement.lang=lang;document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.title=t.title+' | Shervinah Universal';
  document.querySelectorAll('[data-ui]').forEach(el=>{const k=el.dataset.ui;if(ui[lang][k])el.textContent=ui[lang][k]});
