@@ -26,3 +26,13 @@ try{JSON.parse(localStorage.getItem('su-a11y')||'[]').forEach(c=>a11yClasses.inc
 document.addEventListener('mousemove',e=>{if(document.body.classList.contains('a11y-guide'))document.documentElement.style.setProperty('--guide-y',e.clientY+'px')});
 document.addEventListener('keydown',e=>{if(e.altKey&&e.key.toLowerCase()==='a'){e.preventDefault();setA11yPanel(!a11yPanel.classList.contains('open'))}if(e.key==='Escape'){setA11yPanel(false);closeCart()}if(e.key==='Tab'&&a11yPanel.classList.contains('open')){const focusable=[...a11yPanel.querySelectorAll('button,a[href]')];const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 applyLanguage(lang);renderCart();
+
+const mobileNavToggle=document.getElementById('mobileNavToggle');
+const mainNavigation=document.getElementById('mainNavigation');
+if(mobileNavToggle&&mainNavigation){
+ const closeMobileNavigation=()=>{mainNavigation.classList.remove('mobile-open');mobileNavToggle.setAttribute('aria-expanded','false')};
+ mobileNavToggle.addEventListener('click',()=>{const open=!mainNavigation.classList.contains('mobile-open');mainNavigation.classList.toggle('mobile-open',open);mobileNavToggle.setAttribute('aria-expanded',String(open))});
+ mainNavigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMobileNavigation));
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMobileNavigation()});
+ window.addEventListener('resize',()=>{if(window.innerWidth>980)closeMobileNavigation()});
+}
