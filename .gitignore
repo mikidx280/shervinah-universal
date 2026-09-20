@@ -20,3 +20,7 @@ dist/
 build/
 .env
 .env.local
+
+# Private payment configuration and order records
+private-payment-config.php
+shervinah-orders/

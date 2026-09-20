@@ -1,0 +1,50 @@
+(() => {
+  'use strict';
+  const key='su-cart-v3';
+  let lang=localStorage.getItem('su-lang')==='fa'?'fa':'en', catalog=null, quote=null, request=0, busy=false;
+  const el=id=>document.getElementById(id), text=(en,fa)=>lang==='fa'?fa:en;
+  const money=cents=>new Intl.NumberFormat(lang==='fa'?'fa-IR':'en-US',{style:'currency',currency:'USD'}).format(cents/100);
+  let cart={};
+  try { const raw=JSON.parse(localStorage.getItem(key)||'null'); if(raw && typeof raw==='object' && !Array.isArray(raw)) cart=raw;
+    else {const old=JSON.parse(localStorage.getItem('su-cart-v2')||'[]');const count=Array.isArray(old)?old.filter(x=>typeof x==='string' && x.startsWith('Saffron Healing Oil')).length:0;if(count)cart['saffron-oil-20ml']=Math.min(count,25);}
+  } catch {cart={};}
+  cart=Object.fromEntries(Object.entries(cart).filter(([id,n])=>id==='saffron-oil-20ml'&&Number.isInteger(n)&&n>0&&n<=25));
+  const save=()=>localStorage.setItem(key,JSON.stringify(cart));save();
+  const errors={
+    destination_unavailable:['Shipping is not available to this destination.','ارسال به این مقصد در دسترس نیست.'],
+    parcel_overweight:['This parcel exceeds the service weight limit. Contact us for a shipping quote.','وزن بسته بیش از حد مجاز است. برای هزینه ارسال با ما تماس بگیرید.'],
+    invalid_cart:['Please add a product to your order.','لطفاً محصولی به سفارش اضافه کنید.'],
+    quote_expired:['Your quote expired. Review the refreshed total and try again.','اعتبار قیمت پایان یافت. مبلغ جدید را بررسی و دوباره تلاش کنید.'],
+    us_customs_quote:['US postage is shown with your shipping discount. US import charges still require a separate quote; card payment is unavailable for this destination until the full total is confirmed.','هزینه پست آمریکا با تخفیف نمایش داده می‌شود. هزینه‌های واردات نیاز به استعلام دارد؛ تا تأیید مبلغ نهایی، پرداخت این مقصد فعال نیست.'],
+    payment_setup:['Shipping has been calculated. Card payments are being activated; please contact us to complete your order.','هزینه ارسال محاسبه شد. پرداخت با کارت در حال راه‌اندازی است؛ برای تکمیل سفارش با ما تماس بگیرید.'],
+    customer_details:['Please check your contact and delivery details.','لطفاً اطلاعات تماس و نشانی را بررسی کنید.'],
+    already_paid:['This order has already been paid.','این سفارش قبلاً پرداخت شده است.'],
+    payment_pending:['This payment request is being checked. Please do not start another payment. Contact us if needed.','درخواست پرداخت در حال بررسی است. پرداخت جدید انجام ندهید؛ در صورت نیاز با ما تماس بگیرید.']
+  };
+  const message=code=>{const pair=errors[code]||['We could not retrieve a confirmed price or payment status. Please try again later.','دریافت قیمت یا وضعیت پرداخت تأییدشده ممکن نیست. لطفاً بعداً دوباره تلاش کنید.'];return text(...pair);};
+  async function api(action,body) {const r=await fetch('api/commerce.php?action='+action,{credentials:'same-origin',cache:'no-store',...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,csrf:catalog.csrf})}:{})});let data;try{data=await r.json();}catch{throw Error('service_unavailable');}if(!r.ok)throw Error(data.error||'service_unavailable');return data;}
+  function localize(){document.documentElement.lang=lang;document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.querySelectorAll('[data-en]').forEach(e=>{if(e.dataset[lang])e.textContent=e.dataset[lang];});}
+  function productPrices(){document.querySelectorAll('[data-usd-product]').forEach(e=>{const p=catalog?.products[e.dataset.usdProduct];e.textContent=p?money(p.usd_cents):text('Price temporarily unavailable','قیمت موقتاً در دسترس نیست');});}
+  function renderItems(){const target=el('checkout-items');if(!target)return;target.replaceChildren();for(const [id,n] of Object.entries(cart)){const p=catalog.products[id];if(!p)continue;const row=document.createElement('div');row.className='checkout-item';const name=document.createElement('span');name.textContent=(lang==='fa'?p.name_fa:p.name)+' · '+money(p.usd_cents);const qty=document.createElement('input');qty.type='number';qty.min='1';qty.max='25';qty.value=n;qty.setAttribute('aria-label',text('Quantity','تعداد'));qty.addEventListener('change',()=>{const v=Number(qty.value);if(!Number.isInteger(v)||v<1||v>25){qty.value=cart[id];return;}cart[id]=v;save();refreshQuote();});const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label',text('Remove product','حذف محصول'));remove.onclick=()=>{delete cart[id];save();renderItems();refreshQuote();};row.append(name,qty,remove);target.append(row);}}
+  function line(label,value,total=false){const row=document.createElement('div');row.className='checkout-line'+(total?' checkout-total':'');const a=document.createElement('span'),b=document.createElement('span');a.textContent=label;b.textContent=value;row.append(a,b);return row;}
+  function showQuote(){const box=el('checkout-summary');if(!box)return;box.replaceChildren();if(!quote){box.textContent=text('Choose a destination to calculate shipping.','برای محاسبه ارسال، مقصد را انتخاب کنید.');return;}
+    const base=Math.round(quote.shipping_base_ils_cents/quote.rate),discount=base-quote.shipping_usd_cents;
+    box.append(line(text('Products','محصولات'),money(quote.product_usd_cents)),line(text('ECO POST shipping','ارسال ECO POST'),money(base)),line(text('Shipping discount (₪10)','تخفیف ارسال (۱۰ شِکِل)'),'-'+money(discount)),line(text('Shipping after discount','ارسال پس از تخفیف'),money(quote.shipping_usd_cents)),line(quote.total_is_estimate?text('Subtotal before US import charges','جمع قبل از هزینه واردات آمریکا'):text('Total charged in USD','مبلغ پرداخت به دلار'),money(quote.total_usd_cents),true));
+    const info=document.createElement('p');info.textContent=text(`Parcel: ${quote.weight_grams} g. Bank of Israel rate dated ${quote.rate_date}. This quote is valid for 15 minutes.`,`وزن بسته: ${quote.weight_grams} گرم. نرخ بانک اسرائیل در تاریخ ${quote.rate_date}. اعتبار قیمت: ۱۵ دقیقه.`);box.append(info);
+    const tax=document.createElement('p');tax.textContent=text('For destinations outside the US, any import duties or local taxes collected at delivery are not included.','برای مقصدهای خارج از آمریکا، عوارض واردات و مالیات محلی هنگام تحویل در این مبلغ نیست.');box.append(tax);
+    el('checkout-note').textContent=quote.payment_available?'':message(quote.unavailable_reason);el('checkout-pay').disabled=!quote.payment_available||busy;
+  }
+  async function refreshQuote(){const seq=++request;quote=null;el('checkout-pay').disabled=true;el('checkout-note').textContent='';showQuote();if(!Object.keys(cart).length){el('checkout-status').textContent=message('invalid_cart');return;}const country=el('checkout-country').value;el('region-label').hidden=country!=='PT';if(!country)return;el('checkout-status').textContent=text('Calculating shipping…','در حال محاسبه ارسال…');try{const next=await api('quote',{items:cart,country,region:country==='PT'?el('checkout-region').value:''});if(seq!==request)return;quote=next;el('checkout-status').textContent='';showQuote();}catch(e){if(seq===request)el('checkout-status').textContent=message(e.message);}}
+  function countries(){const select=el('checkout-country');if(!select)return;const current=select.value;select.replaceChildren();const placeholder=new Option(text('Choose a country','کشور را انتخاب کنید'),'');select.add(placeholder);const names=new Intl.DisplayNames([lang],{type:'region'});Object.keys(catalog.countries).map(code=>[code,names.of(code)]).sort((a,b)=>a[1].localeCompare(b[1],lang)).forEach(([code,name])=>select.add(new Option(name,code)));select.value=current;}
+  async function init(){document.querySelectorAll('[data-checkout-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.checkoutLang;localStorage.setItem('su-lang',lang);localize();if(catalog){countries();renderItems();showQuote();}});
+    document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;productPrices();}));
+    document.querySelectorAll('[data-buy-product]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.buyProduct;cart[id]=Math.min(25,(cart[id]||0)+1);save();location.href='checkout.html';}));
+    if(el('checkout-form'))localize();
+    try{catalog=await api('catalog');productPrices();if(!el('checkout-form'))return;countries();renderItems();
+      const order=new URLSearchParams(location.search).get('order');if(order){el('checkout-content').hidden=true;el('checkout-status').textContent=text('Verifying payment…','در حال بررسی پرداخت…');const result=await api('status',{order});if(result.status==='paid'&&!sessionStorage.getItem('paid-'+order)){const purchased=Object.fromEntries(result.items.map(i=>[i.id,i.quantity]));if(JSON.stringify(cart)===JSON.stringify(purchased)){cart={};save();}sessionStorage.setItem('paid-'+order,'1');}el('checkout-status').textContent=result.status==='paid'?text(`Payment confirmed. Order ${result.reference} · ${money(result.total_usd_cents)}.`,`پرداخت تأیید شد. سفارش ${result.reference} · ${money(result.total_usd_cents)}.`):text('Payment has not been confirmed. If you submitted payment, do not pay again; contact shervinahuniversal@gmail.com.','پرداخت هنوز تأیید نشده است. اگر پرداخت کرده‌اید، دوباره پرداخت نکنید؛ با shervinahuniversal@gmail.com تماس بگیرید.');return;}
+      showQuote();el('checkout-country').onchange=refreshQuote;el('checkout-region').onchange=refreshQuote;
+      el('checkout-form').onsubmit=async e=>{e.preventDefault();if(busy||!quote?.payment_available)return;busy=true;el('checkout-pay').disabled=true;const form=new FormData(e.target);try{const result=await api('checkout',{quote_id:quote.id,consent:form.get('consent')==='on',customer:Object.fromEntries(['name','email','phone','address','city','postal_code'].map(k=>[k,form.get(k)]))});location.assign(result.url);}catch(err){el('checkout-status').textContent=message(err.message);if(err.message==='quote_expired')await refreshQuote();busy=false;showQuote();}};
+    }catch(e){productPrices();if(el('checkout-status'))el('checkout-status').textContent=message(e.message);}
+  }
+  init();
+})();
