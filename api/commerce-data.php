@@ -32,14 +32,15 @@ function commerce_calculate(array $items, string $country, string $region, float
         if (!in_array($region,['mainland','azores','madeira'],true)) throw new InvalidArgumentException('region_required');
         if ($region!=='mainland') $group=4;
     }
-    $catalog=commerce_catalog(); $weight=0; $subtotal=0; $lines=[];
+    $catalog=commerce_catalog(); $weight=0; $subtotal=0; $productUsd=0; $lines=[];
     if (!$items || count($items)>20) throw new InvalidArgumentException('invalid_cart');
     foreach($items as $id=>$qty) {
         if (!isset($catalog[$id]) || !is_int($qty) || $qty<1 || $qty>25) throw new InvalidArgumentException('invalid_cart');
         $p=$catalog[$id];
         if (empty($p['packed_grams'])) throw new InvalidArgumentException('weight_missing');
         $weight+=$p['packed_grams']*$qty; $subtotal+=$p['ils_cents']*$qty;
-        $lines[]=['id'=>$id,'quantity'=>$qty,'name'=>$p['name'],'name_fa'=>$p['name_fa'],'unit_ils_cents'=>$p['ils_cents']];
+        $unitUsd=(int)round($p['ils_cents']/$rate,0,PHP_ROUND_HALF_UP);$productUsd+=$unitUsd*$qty;
+        $lines[]=['id'=>$id,'quantity'=>$qty,'name'=>$p['name'],'name_fa'=>$p['name_fa'],'unit_ils_cents'=>$p['ils_cents'],'unit_usd_cents'=>$unitUsd];
     }
     $limits=[100,250,500,750,1000,1500,2000]; $band=null;
     foreach($limits as $i=>$limit) if($weight<=$limit){$band=$i;break;}
@@ -48,7 +49,6 @@ function commerce_calculate(array $items, string $country, string $region, float
     $base=commerce_rates()[$group][$band??6];
     if($weight>2000) $base+=(int)ceil(($weight-2000)/1000)*($country==='GB'?3400:4500);
     $discount=min(1000,$base); $shipping=$base-$discount;
-    $productUsd=(int)round($subtotal/$rate,0,PHP_ROUND_HALF_UP);
     $shippingUsd=(int)round($shipping/$rate,0,PHP_ROUND_HALF_UP);
     return ['items'=>$lines,'country'=>$country,'region'=>$region,'group'=>$group,'weight_grams'=>$weight,'weight_limit_grams'=>$band!==null?$limits[$band]:(int)(ceil($weight/1000)*1000),'product_ils_cents'=>$subtotal,'shipping_base_ils_cents'=>$base,'shipping_discount_ils_cents'=>$discount,'shipping_ils_cents'=>$shipping,'product_usd_cents'=>$productUsd,'shipping_usd_cents'=>$shippingUsd,'total_usd_cents'=>$productUsd+$shippingUsd,'currency'=>'USD','rate'=>$rate,'tariff_version'=>'israel-post-2026-07-1-4'];
 }
