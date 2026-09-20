@@ -4,10 +4,11 @@ declare(strict_types=1);
 // Each price is ILS per parcel in the 1–4 monthly shipments column.
 function commerce_catalog(): array {
     return [
-        'saffron-oil-20ml' => ['name'=>'Saffron Healing Oil, 20 ml','name_fa'=>'روغن زعفران، ۲۰ میلی‌لیتر','ils_cents'=>12500,'packed_grams'=>200,'initial_stock'=>10],
-        'jerusalem-gift-set' => ['name'=>'Jerusalem Gift Set: Treasures of the Holy Land','name_fa'=>'بسته هدیه اورشلیم: یادگارهای سرزمین مقدس','ils_cents'=>4000,'packed_grams'=>200,'initial_stock'=>20],
-        'red-string-pack-5' => ['name'=>'Red String Bracelets, Pack of 5','name_fa'=>'بسته ۵ عددی دستبند نخ قرمز','ils_cents'=>3000,'packed_grams'=>70,'initial_stock'=>100],
-        'hamsa-home-blessing' => ['name'=>'Hamsa with Hebrew Home Blessing','name_fa'=>'خمسه با دعای برکت خانه به زبان عبری','ils_cents'=>4000,'packed_grams'=>250,'initial_stock'=>10],
+        'saffron-oil-20ml' => ['name'=>'Saffron Healing Oil, 20 ml','name_fa'=>'روغن زعفران، ۲۰ میلی‌لیتر','usd_cents'=>4000,'packed_grams'=>200,'initial_stock'=>10],
+        'jerusalem-gift-set' => ['name'=>'Jerusalem Gift Set: Treasures of the Holy Land','name_fa'=>'بسته هدیه اورشلیم: یادگارهای سرزمین مقدس','usd_cents'=>1000,'packed_grams'=>200,'initial_stock'=>20],
+        'red-string-pack-5' => ['name'=>'Red String Bracelets, Pack of 5','name_fa'=>'بسته ۵ عددی دستبند نخ قرمز','usd_cents'=>1000,'packed_grams'=>70,'initial_stock'=>100],
+        'chai-necklace-gold' => ['name'=>'Chai Necklace in Gold-Plated 925 Sterling Silver','name_fa'=>'گردنبند حی از نقره ۹۲۵ با روکش طلا','usd_cents'=>1500,'packed_grams'=>250,'initial_stock'=>10],
+        'hamsa-home-blessing' => ['name'=>'Hamsa with Hebrew Home Blessing','name_fa'=>'خمسه با دعای برکت خانه به زبان عبری','usd_cents'=>1000,'packed_grams'=>250,'initial_stock'=>10],
     ];
 }
 function commerce_groups(): array {
@@ -37,15 +38,15 @@ function commerce_calculate(array $items, string $country, string $region, float
         if (!in_array($region,['mainland','azores','madeira'],true)) throw new InvalidArgumentException('region_required');
         if ($region!=='mainland') $group=4;
     }
-    $catalog=commerce_catalog(); $weight=0; $subtotal=0; $productUsd=0; $lines=[];
+    $catalog=commerce_catalog(); $weight=0; $productUsd=0; $lines=[];
     if (!$items || count($items)>20) throw new InvalidArgumentException('invalid_cart');
     foreach($items as $id=>$qty) {
         if (!isset($catalog[$id]) || !is_int($qty) || $qty<1 || $qty>25) throw new InvalidArgumentException('invalid_cart');
         $p=$catalog[$id];
         if (empty($p['packed_grams'])) throw new InvalidArgumentException('weight_missing');
-        $weight+=$p['packed_grams']*$qty; $subtotal+=$p['ils_cents']*$qty;
-        $unitUsd=(int)round($p['ils_cents']/$rate,0,PHP_ROUND_HALF_UP);$productUsd+=$unitUsd*$qty;
-        $lines[]=['id'=>$id,'quantity'=>$qty,'name'=>$p['name'],'name_fa'=>$p['name_fa'],'unit_ils_cents'=>$p['ils_cents'],'unit_usd_cents'=>$unitUsd];
+        $weight+=$p['packed_grams']*$qty;
+        $unitUsd=$p['usd_cents'];$productUsd+=$unitUsd*$qty;
+        $lines[]=['id'=>$id,'quantity'=>$qty,'name'=>$p['name'],'name_fa'=>$p['name_fa'],'unit_usd_cents'=>$unitUsd];
     }
     $limits=[100,250,500,750,1000,1500,2000]; $band=null;
     foreach($limits as $i=>$limit) if($weight<=$limit){$band=$i;break;}
@@ -55,5 +56,5 @@ function commerce_calculate(array $items, string $country, string $region, float
     if($weight>2000) $base+=(int)ceil(($weight-2000)/1000)*($country==='GB'?3400:4500);
     $discount=min(1000,$base); $shipping=$base-$discount;
     $shippingUsd=(int)round($shipping/$rate,0,PHP_ROUND_HALF_UP);
-    return ['items'=>$lines,'country'=>$country,'region'=>$region,'group'=>$group,'weight_grams'=>$weight,'weight_limit_grams'=>$band!==null?$limits[$band]:(int)(ceil($weight/1000)*1000),'product_ils_cents'=>$subtotal,'shipping_base_ils_cents'=>$base,'shipping_discount_ils_cents'=>$discount,'shipping_ils_cents'=>$shipping,'product_usd_cents'=>$productUsd,'shipping_usd_cents'=>$shippingUsd,'total_usd_cents'=>$productUsd+$shippingUsd,'currency'=>'USD','rate'=>$rate,'tariff_version'=>'israel-post-2026-07-1-4'];
+    return ['items'=>$lines,'country'=>$country,'region'=>$region,'group'=>$group,'weight_grams'=>$weight,'weight_limit_grams'=>$band!==null?$limits[$band]:(int)(ceil($weight/1000)*1000),'shipping_base_ils_cents'=>$base,'shipping_discount_ils_cents'=>$discount,'shipping_ils_cents'=>$shipping,'product_usd_cents'=>$productUsd,'shipping_usd_cents'=>$shippingUsd,'total_usd_cents'=>$productUsd+$shippingUsd,'currency'=>'USD','rate'=>$rate,'tariff_version'=>'israel-post-2026-07-1-4'];
 }

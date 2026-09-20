@@ -129,3 +129,5 @@ body.a11y-spacing main{letter-spacing:.12em;word-spacing:.18em}body.a11y-line-he
 
 /* Product images retain their full shape, including hanging cords and packaging. */
 .shop-page-grid .product-gallery{flex-wrap:wrap;min-width:0}.shop-page-grid .product-gallery img{object-fit:contain;background:#fff;max-height:420px}.shop-page-grid .product-gallery img:first-child{aspect-ratio:1/1}.shop-page-grid .product-info{min-width:0}.shop-page-grid [data-stock-product]{min-height:0!important;font-weight:600}.shop-page-grid button:disabled{opacity:.55;cursor:not-allowed}
+
+.shop-page-grid .product-gallery>a{display:block;width:100%;max-width:220px}.shop-page-grid .product-gallery>a img{width:100%;height:auto;aspect-ratio:auto}.shop-page-grid .product-gallery small{display:block;width:100%;color:#333}

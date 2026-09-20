@@ -21,10 +21,10 @@ try {
     session_set_cookie_params(['secure'=>true,'httponly'=>true,'samesite'=>'Lax','path'=>'/']);session_start();
     $_SESSION['shop_csrf']??=bin2hex(random_bytes(24));
     if($action==='catalog' && $_SERVER['REQUEST_METHOD']==='GET') {
-        $rate=shop_rate();$products=commerce_catalog();
+        $products=commerce_catalog();
         $inventoryLock=shop_inventory_lock();$stock=shop_stock();fclose($inventoryLock);
-        foreach($products as $id=>&$p){$p['usd_cents']=(int)round($p['ils_cents']/$rate['rate']);$p['stock_available']=$stock[$id]['available'];unset($p['initial_stock']);}unset($p);
-        shop_reply(200,['products'=>$products,'countries'=>commerce_groups(),'rate'=>$rate,'csrf'=>$_SESSION['shop_csrf']]);
+        foreach($products as $id=>&$p){$p['stock_available']=$stock[$id]['available'];unset($p['initial_stock']);}unset($p);
+        shop_reply(200,['products'=>$products,'countries'=>commerce_groups(),'csrf'=>$_SESSION['shop_csrf']]);
     }
     if($_SERVER['REQUEST_METHOD']!=='POST') shop_reply(405,['error'=>'method_not_allowed']);
     if((int)($_SERVER['CONTENT_LENGTH']??0)>16000) shop_reply(413,['error'=>'request_too_large']);
