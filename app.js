@@ -7,7 +7,7 @@ window.removeFromCart=i=>{cart.splice(i,1);localStorage.setItem('su-cart-v2',JSO
 $$('.add-to-cart').forEach(btn=>btn.addEventListener('click',()=>{cart.push(btn.dataset.product);localStorage.setItem('su-cart-v2',JSON.stringify(cart));renderCart();const old=btn.textContent;btn.textContent=lang==='fa'?'اضافه شد ✓':'Added ✓';setTimeout(()=>btn.textContent=old,900)}));
 let cartReturnFocus=null;function openCart(){cartReturnFocus=document.activeElement; $('#cartDrawer').classList.add('open');$('#cartBackdrop').classList.add('open');$('#cartDrawer').setAttribute('aria-hidden','false');$('#closeCart').focus()}
 function closeCart(){ $('#cartDrawer').classList.remove('open');$('#cartBackdrop').classList.remove('open');$('#cartDrawer').setAttribute('aria-hidden','true');if(cartReturnFocus)cartReturnFocus.focus()}
-$('#cartButton').addEventListener('click',()=>location.href='checkout.html');$('#closeCart').addEventListener('click',closeCart);$('#cartBackdrop').addEventListener('click',closeCart);$$('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>applyLanguage(btn.dataset.lang)));
+$('#cartButton').addEventListener('click',()=>window.dispatchEvent(new Event('store:cart')));$('#closeCart').addEventListener('click',closeCart);$('#cartBackdrop').addEventListener('click',closeCart);$$('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>applyLanguage(btn.dataset.lang)));
 const yearEl=$('#year');if(yearEl)yearEl.textContent=new Date().getFullYear();
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12});$$('.reveal').forEach(el=>observer.observe(el));
 

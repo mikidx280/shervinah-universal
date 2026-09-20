@@ -2,6 +2,15 @@
 declare(strict_types=1);
 require_once __DIR__.'/commerce-data.php';
 require_once __DIR__.'/commerce-stock.php';
+function shop_write_order($fp,array $data): void {
+    $raw=json_encode($data,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE);
+    // Keep a recovery copy before replacing a ledger record. Inventory fails closed on corruption.
+    $meta=stream_get_meta_data($fp);$path=$meta['uri'];
+    rewind($fp);$previous=stream_get_contents($fp);
+    if($previous!==''&&file_put_contents($path.'.bak',$previous,LOCK_EX)!==strlen($previous))throw new RuntimeException('storage_unavailable');
+    rewind($fp);if(!ftruncate($fp,0)||fwrite($fp,$raw)!==strlen($raw)||!fflush($fp))throw new RuntimeException('storage_unavailable');
+    if(function_exists('fsync'))fsync($fp);
+}
 function shop_config(): array {
     $path=dirname(__DIR__,2).'/private-payment-config.php';
     return is_file($path) ? (array)require $path : [];
@@ -62,6 +71,7 @@ function shop_paid_matches(array $r,array $order,int $terminal): bool {
         && (string)($r['TranzactionId']??'0')!=='0' && empty($t['IsRefund']);
 }
 function shop_verify(array &$order): void {
+    $order['access_token']??=bin2hex(random_bytes(32));
     if($order['status']==='paid' || empty($order['low_profile_id'])) return;
     $r=shop_cardcom('GetLpResult',['LowProfileId'=>$order['low_profile_id']]);
     if(shop_paid_matches($r,$order,(int)shop_config()['terminal_number'])) {

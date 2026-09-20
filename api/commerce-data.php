@@ -2,7 +2,7 @@
 declare(strict_types=1);
 // Israel Post business subscriber tariff, July 2026, pp. 6–8 and 14–29.
 // Each price is ILS per parcel in the 1–4 monthly shipments column.
-function commerce_catalog(): array {
+function commerce_seed_catalog(): array {
     return [
         'saffron-oil-20ml' => ['name'=>'Saffron Healing Oil, 20 ml','name_fa'=>'روغن زعفران، ۲۰ میلی‌لیتر','usd_cents'=>4000,'packed_grams'=>200,'initial_stock'=>10],
         'jerusalem-gift-set' => ['name'=>'Jerusalem Gift Set: Treasures of the Holy Land','name_fa'=>'بسته هدیه اورشلیم: یادگارهای سرزمین مقدس','usd_cents'=>1000,'packed_grams'=>200,'initial_stock'=>20],
@@ -10,6 +10,18 @@ function commerce_catalog(): array {
         'chai-necklace-gold' => ['name'=>'Chai Necklace in Gold-Plated 925 Sterling Silver','name_fa'=>'گردنبند حی از نقره ۹۲۵ با روکش طلا','usd_cents'=>1500,'packed_grams'=>250,'initial_stock'=>10],
         'hamsa-home-blessing' => ['name'=>'Hamsa with Hebrew Home Blessing','name_fa'=>'خمسه با دعای برکت خانه به زبان عبری','usd_cents'=>1000,'packed_grams'=>250,'initial_stock'=>10],
     ];
+}
+function commerce_catalog(): array {
+    $path=dirname(__DIR__,2).'/shervinah-orders/catalog.json';
+    if(is_file($path)) {
+        $data=json_decode((string)file_get_contents($path),true,512,JSON_THROW_ON_ERROR);
+        if(!is_array($data)) throw new RuntimeException('catalog_unavailable');
+        return $data;
+    }
+    $data=commerce_seed_catalog();
+    $details=json_decode((string)file_get_contents(__DIR__.'/product-details.json'),true,512,JSON_THROW_ON_ERROR);
+    foreach($data as $id=>&$p) $p=array_merge($p,$details[$id]??[],['active'=>true]);
+    return $data;
 }
 function commerce_groups(): array {
     // ISO country/territory codes. No default group for unknown destinations.
@@ -41,7 +53,7 @@ function commerce_calculate(array $items, string $country, string $region, float
     $catalog=commerce_catalog(); $weight=0; $productUsd=0; $lines=[];
     if (!$items || count($items)>20) throw new InvalidArgumentException('invalid_cart');
     foreach($items as $id=>$qty) {
-        if (!isset($catalog[$id]) || !is_int($qty) || $qty<1 || $qty>25) throw new InvalidArgumentException('invalid_cart');
+        if (!isset($catalog[$id]) || empty($catalog[$id]['active']) || !is_int($qty) || $qty<1 || $qty>25) throw new InvalidArgumentException('invalid_cart');
         $p=$catalog[$id];
         if (empty($p['packed_grams'])) throw new InvalidArgumentException('weight_missing');
         $weight+=$p['packed_grams']*$qty;

@@ -1,0 +1,46 @@
+{
+  "saffron-oil-20ml": {
+    "category": "oils",
+    "description": "Hand-blended with saffron (Crocus sativus) sourced from Iran, this ritual oil draws on generations of Persian spiritual tradition. It is used in meditation, self-care rituals and daily intention-setting, and makes a meaningful gift.\n20 ml",
+    "description_fa": "این روغن آیینی با زعفران اصل ایران به‌صورت دستی ترکیب شده و ریشه در سنتی چندنسلی از معنویت ایرانی دارد. برای مدیتیشن، مراقبت از خود و تعیین نیت روزانه استفاده می‌شود و هدیه‌ای معنادار نیز هست.\n۲۰ میلی‌لیتر",
+    "images": [
+      "assets/images/products/oil-saffron/saffron-oil-01.jpg",
+      "assets/images/products/oil-saffron/saffron-oil-02.jpg",
+      "assets/images/products/oil-saffron/saffron-oil-03.jpg"
+    ]
+  },
+  "jerusalem-gift-set": {
+    "category": "souvenirs",
+    "description": "A gift set featuring anointing oil, holy water, soil from Jerusalem and frankincense resin, presented in a Jerusalem-themed box. A meaningful keepsake for gifting or personal reflection.\nFour bottles in one gift box",
+    "description_fa": "بسته‌ای هدیه شامل روغن تدهین، آب مقدس، خاک اورشلیم و دانه‌های کندر، در جعبه‌ای با طرح اورشلیم؛ یادگاری معنادار برای هدیه‌دادن یا لحظه‌های تأمل شخصی.\nچهار بطری در یک جعبه هدیه",
+    "images": [
+      "assets/images/products/new/jerusalem-gift-set.webp"
+    ]
+  },
+  "hamsa-home-blessing": {
+    "category": "souvenirs",
+    "description": "A hanging hamsa with a Hebrew home blessing, crafted from gold-plated metal with colorful enamel. Made in Israel, a meaningful decoration for the home or a thoughtful gift.\n10 cm long × 7 cm wide",
+    "description_fa": "خمسه آویز با دعای برکت خانه به زبان عبری، ساخته‌شده از فلز با روکش طلا و مینای رنگی. ساخت اسرائیل؛ تزیینی معنادار برای خانه یا هدیه‌ای ماندگار.\nطول ۱۰ سانتی‌متر × عرض ۷ سانتی‌متر",
+    "images": [
+      "assets/images/products/new/hamsa-home-blessing.webp"
+    ]
+  },
+  "red-string-pack-5": {
+    "category": "jewelry",
+    "description": "Five red strings to wear around the wrist, traditionally associated with blessings, good fortune and symbolic protection against the evil eye. A small gift with personal meaning.\nOne pack contains 5 red strings",
+    "description_fa": "پنج نخ قرمز برای بستن دور مچ دست که در باورهای سنتی با برکت، خوش‌یمنی و محافظت نمادین در برابر چشم‌زخم پیوند دارند؛ هدیه‌ای کوچک و معنادار.\nهر بسته شامل ۵ نخ قرمز است",
+    "images": [
+      "assets/images/products/new/red-string-pack.jpg",
+      "assets/images/products/new/red-string-wrist.jpg"
+    ]
+  },
+  "chai-necklace-gold": {
+    "category": "jewelry",
+    "description": "A necklace featuring the Hebrew word Chai, meaning life. Made from gold-plated 925 sterling silver, with a 45 cm chain. Nickel-free and hypoallergenic.",
+    "description_fa": "گردنبندی با واژه عبری حی، به معنای زندگی. ساخته‌شده از نقره ۹۲۵ با روکش طلا و زنجیر ۴۵ سانتی‌متری؛ بدون نیکل و ضدحساسیت.",
+    "images": [
+      "assets/images/products/chai-necklace/necklace.jpeg",
+      "assets/images/products/chai-necklace/shervinah-preview.png"
+    ]
+  }
+}
