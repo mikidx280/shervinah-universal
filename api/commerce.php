@@ -13,6 +13,7 @@ try {
         if(!preg_match('/^[a-f0-9]{48}$/',$id)) shop_reply(400,['error'=>'invalid_order']);
         $path=shop_storage().'/'.$id.'.json';
         if(!is_file($path)) shop_reply(404,['error'=>'invalid_order']);
+        $inventoryLock=shop_inventory_lock(true);
         $fp=fopen($path,'r+');flock($fp,LOCK_EX);$order=json_decode(stream_get_contents($fp),true,512,JSON_THROW_ON_ERROR);
         shop_verify($order);shop_write($fp,$order);flock($fp,LOCK_UN);fclose($fp);
         shop_reply(200,['received'=>true]);
@@ -21,7 +22,8 @@ try {
     $_SESSION['shop_csrf']??=bin2hex(random_bytes(24));
     if($action==='catalog' && $_SERVER['REQUEST_METHOD']==='GET') {
         $rate=shop_rate();$products=commerce_catalog();
-        foreach($products as &$p) $p['usd_cents']=(int)round($p['ils_cents']/$rate['rate']);unset($p);
+        $inventoryLock=shop_inventory_lock();$stock=shop_stock();fclose($inventoryLock);
+        foreach($products as $id=>&$p){$p['usd_cents']=(int)round($p['ils_cents']/$rate['rate']);$p['stock_available']=$stock[$id]['available'];unset($p['initial_stock']);}unset($p);
         shop_reply(200,['products'=>$products,'countries'=>commerce_groups(),'rate'=>$rate,'csrf'=>$_SESSION['shop_csrf']]);
     }
     if($_SERVER['REQUEST_METHOD']!=='POST') shop_reply(405,['error'=>'method_not_allowed']);
@@ -49,6 +51,7 @@ try {
         if(!filter_var($customer['email'],FILTER_VALIDATE_EMAIL)) shop_reply(422,['error'=>'customer_details']);
         $config=shop_config();
         if(in_array($q['country'],$config['suspended_countries']??[],true)) shop_reply(422,['error'=>'destination_unavailable']);
+        $inventoryLock=shop_inventory_lock(true);
         $id=$q['id'];$path=shop_storage().'/'.$id.'.json';$fp=fopen($path,'c+');flock($fp,LOCK_EX);
         $old=stream_get_contents($fp);$order=$old?json_decode($old,true,512,JSON_THROW_ON_ERROR):null;
         if($order) {
@@ -58,7 +61,8 @@ try {
         // Bound session creation, and never repeat an uncertain provider request.
         if(($_SESSION['last_checkout']??0)>time()-30) shop_reply(429,['error'=>'try_later']);
         $_SESSION['last_checkout']=time();
-        $order=['id'=>$id,'quote'=>$q,'customer'=>$customer,'status'=>'creating','created_at'=>gmdate('c'),'consent_version'=>'2026-09-19'];
+        shop_stock_assert($q['items'],shop_stock());
+        $order=['id'=>$id,'quote'=>$q,'customer'=>$customer,'status'=>'creating','inventory_reserved'=>true,'created_at'=>gmdate('c'),'consent_version'=>'2026-09-20'];
         shop_write($fp,$order);
         $base=$origin;
         $r=shop_cardcom('Create',['Operation'=>'ChargeOnly','ReturnValue'=>$id,'Amount'=>$q['total_usd_cents']/100,'ISOCoinId'=>2,'Language'=>'en','ProductName'=>'Shervinah order '.substr($id,0,12),'SuccessRedirectUrl'=>$base.'/checkout.html?order='.$id,'FailedRedirectUrl'=>$base.'/checkout.html?order='.$id.'&result=failed','CancelRedirectUrl'=>$base.'/checkout.html?order='.$id.'&result=cancelled','WebHookUrl'=>$base.'/api/commerce.php?action=webhook&order='.$id,'UIDefinition'=>['CardOwnerNameValue'=>$customer['name'],'CardOwnerEmailValue'=>$customer['email'],'CardOwnerPhoneValue'=>$customer['phone'],'IsCardOwnerEmailRequired'=>true],'AdvancedDefinition'=>['MinNumOfPayments'=>1,'MaxNumOfPayments'=>1]]);
@@ -72,6 +76,7 @@ try {
     if($action==='status') {
         $id=(string)($input['order']??'');
         if(!preg_match('/^[a-f0-9]{48}$/',$id)||empty($_SESSION['shop_orders'][$id]))shop_reply(404,['error'=>'invalid_order']);
+        $inventoryLock=shop_inventory_lock(true);
         $fp=fopen(shop_storage().'/'.$id.'.json','r+');flock($fp,LOCK_EX);$order=json_decode(stream_get_contents($fp),true,512,JSON_THROW_ON_ERROR);
         shop_verify($order);shop_write($fp,$order);flock($fp,LOCK_UN);fclose($fp);
         shop_reply(200,['status'=>$order['status'],'reference'=>substr($id,0,12),'total_usd_cents'=>$order['quote']['total_usd_cents'],'items'=>$order['quote']['items']]);

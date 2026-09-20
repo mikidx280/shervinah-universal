@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/commerce-data.php';
+require_once __DIR__.'/commerce-stock.php';
 function shop_config(): array {
     $path=dirname(__DIR__,2).'/private-payment-config.php';
     return is_file($path) ? (array)require $path : [];
@@ -33,16 +34,15 @@ function shop_rate(): array {
 }
 function shop_quote(array $items,string $country,string $region): array {
     $rate=shop_rate(); $q=commerce_calculate($items,$country,$region,$rate['rate']);
+    $inventoryLock=shop_inventory_lock();
+    try {shop_stock_assert($q['items'],shop_stock());} finally {fclose($inventoryLock);}
     $q['rate_date']=$rate['date']; $q['expires_at']=time()+900;
     $config=shop_config();
     $q['payment_available']=!empty($config['enabled']) && !empty($config['api_name']) && !empty($config['terminal_number']);
     $q['unavailable_reason']=$q['payment_available']?'':'payment_setup';
     if(in_array($country,$config['suspended_countries']??[],true)) throw new InvalidArgumentException('destination_unavailable');
-    // US DDP charges cannot safely be inferred from postage alone.
-    // Keep a base quote visible but prevent charging an incomplete total.
-    if(in_array($country,['US','PR','VI'],true)) {
-        $q['payment_available']=false; $q['unavailable_reason']='us_customs_quote'; $q['total_is_estimate']=true;
-    } else $q['total_is_estimate']=false;
+    // Postage only: destination and weight tariff, less one order discount.
+    $q['total_is_estimate']=false;
     return $q;
 }
 function shop_cardcom(string $action,array $body): array {

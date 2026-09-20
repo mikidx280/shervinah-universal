@@ -3,7 +3,12 @@ declare(strict_types=1);
 // Israel Post business subscriber tariff, July 2026, pp. 6–8 and 14–29.
 // Each price is ILS per parcel in the 1–4 monthly shipments column.
 function commerce_catalog(): array {
-    return ['saffron-oil-20ml' => ['name' => 'Saffron Healing Oil · 20 ml', 'name_fa' => 'روغن زعفران · ۲۰ میلی‌لیتر', 'ils_cents' => 12500, 'packed_grams' => 200]];
+    return [
+        'saffron-oil-20ml' => ['name'=>'Saffron Healing Oil, 20 ml','name_fa'=>'روغن زعفران، ۲۰ میلی‌لیتر','ils_cents'=>12500,'packed_grams'=>200,'initial_stock'=>10],
+        'jerusalem-gift-set' => ['name'=>'Jerusalem Gift Set: Treasures of the Holy Land','name_fa'=>'بسته هدیه اورشلیم: یادگارهای سرزمین مقدس','ils_cents'=>4000,'packed_grams'=>200,'initial_stock'=>20],
+        'red-string-pack-5' => ['name'=>'Red String Bracelets, Pack of 5','name_fa'=>'بسته ۵ عددی دستبند نخ قرمز','ils_cents'=>3000,'packed_grams'=>70,'initial_stock'=>100],
+        'hamsa-home-blessing' => ['name'=>'Hamsa with Hebrew Home Blessing','name_fa'=>'خمسه با دعای برکت خانه به زبان عبری','ils_cents'=>4000,'packed_grams'=>250,'initial_stock'=>10],
+    ];
 }
 function commerce_groups(): array {
     // ISO country/territory codes. No default group for unknown destinations.
