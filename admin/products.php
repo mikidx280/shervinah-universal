@@ -12,6 +12,15 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if(isset($all[$id])&&!hash_equals(hash('sha256',json_encode($old)),(string)($_POST['version']??'')))throw new InvalidArgumentException('This product changed in another tab. Reload before saving.');
         if(isset($stock[$id])&&(string)$stock[$id]['available']!==(string)($_POST['previous_available']??''))throw new InvalidArgumentException('Inventory changed while you were editing. Reload and review the current available quantity.');
         $p=shop_product_input($_POST,$old,$stock[$id]??[]);
+        $images=[];
+        foreach($p['images']??[] as $index=>$current){
+            $replacement=$_FILES['image_replace_'.$index]??null;
+            if($replacement && ($replacement['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE){
+                if(isset($_POST['remove_images'][$index]))throw new InvalidArgumentException('Choose either remove or replace for the same image.');
+                $images[]=shop_upload_image($replacement);
+            }elseif(!isset($_POST['remove_images'][$index])){$images[]=$current;}
+        }
+        $p['images']=$images;
         if(($_FILES['image']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE){$img=shop_upload_image($_FILES['image']);$p['images']=!empty($_POST['replace_images'])?[$img]:array_merge($p['images'],[$img]);}
         if(!$p['images'])throw new InvalidArgumentException('Add at least one product image.');
         $all[$id]=$p;shop_atomic_json(shop_storage().'/catalog.json',$all);
@@ -30,6 +39,7 @@ $id=(string)($_GET['edit']??'');$p=$all[$id]??null;
 <label>Available to sell now<input name="available" type="number" min="0" max="100000" value="<?=esc($stock[$id]['available']??0)?>" required></label>
 <p>Reserved: <?=esc($stock[$id]['reserved']??0)?>. Sold: <?=esc($stock[$id]['sold']??0)?>.</p>
 <label><input name="active" type="checkbox" <?=($p['active']??true)?'checked':''?>> Visible in shop</label>
-<div class="images"><?php foreach($p['images']??[] as $img):?><img src="../<?=esc($img)?>" alt="Current product image"><?php endforeach?></div>
+<h2>Product images</h2><p>Remove or replace individual photos below. Changes apply when you save the product. Keep at least one photo, or upload a new one before saving.</p>
+<div class="product-image-editor"><?php foreach($p['images']??[] as $index=>$img):?><fieldset><legend>Image <?=esc($index+1)?></legend><img src="../<?=esc($img)?>" alt="Current product image <?=esc($index+1)?>"><label><input type="checkbox" name="remove_images[<?=esc($index)?>]" value="1"> Remove this image</label><label>Replace this image<input type="file" name="image_replace_<?=esc($index)?>" accept="image/jpeg,image/png,image/webp"></label></fieldset><?php endforeach?></div>
 <label>Add image (JPG, PNG, WebP; up to 8 MB)<input type="file" name="image" accept="image/jpeg,image/png,image/webp"></label><label><input type="checkbox" name="replace_images"> Replace gallery with this image</label><button>Save product</button></form><?php endif?>
 <table><tr><th>Product</th><th>USD</th><th>Available</th><th>Reserved</th><th>Visible</th></tr><?php foreach($all as $pid=>$row):?><tr><td><a href="?edit=<?=esc($pid)?>"><?=esc($row['name'])?></a></td><td><?=number_format($row['usd_cents']/100,2)?></td><td><?=$stock[$pid]['available']?></td><td><?=$stock[$pid]['reserved']?></td><td><?=$row['active']?'Yes':'No'?></td></tr><?php endforeach?></table></main></html>
