@@ -20,6 +20,22 @@ function shop_storage(): string {
     if(!is_dir($path) && !mkdir($path,0700,true) && !is_dir($path)) throw new RuntimeException('storage_unavailable');
     return $path;
 }
+function shop_featured_products(array $catalog): array {
+    $path=shop_storage().'/featured-products.json';
+    $requested=[];
+    if(is_file($path)){
+        $raw=json_decode((string)file_get_contents($path),true);
+        if(is_array($raw))$requested=array_values(array_filter($raw,'is_string'));
+    }
+    if(!$requested)$requested=['saffron-oil-20ml','red-string-pack-5','jerusalem-gift-set','hamsa-home-blessing'];
+    $active=array_keys(array_filter($catalog,fn($p)=>!empty($p['active'])));
+    $result=[];
+    foreach(array_merge($requested,$active) as $id){
+        if(isset($catalog[$id])&&!empty($catalog[$id]['active'])&&!in_array($id,$result,true))$result[]=$id;
+        if(count($result)===4)break;
+    }
+    return $result;
+}
 function shop_http(string $url, ?array $data=null): array {
     $ch=curl_init($url);
     curl_setopt_array($ch,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>8,CURLOPT_TIMEOUT=>20,CURLOPT_FOLLOWLOCATION=>false,CURLOPT_HTTPHEADER=>['Accept: application/json','Content-Type: application/json']]);
