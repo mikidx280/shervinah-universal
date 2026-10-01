@@ -34,7 +34,7 @@ try {
         }
         fclose($inventoryLock);
         foreach($products as $id=>&$p){$p['stock_available']=$stock[$id]['available'];unset($p['initial_stock']);}unset($p);
-        shop_reply(200,['products'=>$products,'countries'=>array_diff_key(commerce_groups(),array_flip(shop_config()['suspended_countries']??[])),'csrf'=>$_SESSION['shop_csrf'],'pending_order'=>$pending]);
+        shop_reply(200,['products'=>$products,'featured'=>shop_featured_products($all),'countries'=>array_diff_key(commerce_groups(),array_flip(shop_config()['suspended_countries']??[])),'csrf'=>$_SESSION['shop_csrf'],'pending_order'=>$pending]);
     }
     if($_SERVER['REQUEST_METHOD']!=='POST') shop_reply(405,['error'=>'method_not_allowed']);
     if((int)($_SERVER['CONTENT_LENGTH']??0)>16000) shop_reply(413,['error'=>'request_too_large']);
