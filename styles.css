@@ -48,6 +48,13 @@ body.a11y-spacing main{letter-spacing:.12em;word-spacing:.18em}body.a11y-line-he
 .featured-products{padding-top:clamp(3.5rem,7vw,7rem)}
 .featured-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin-top:2rem}
 .featured-product{display:flex;flex-direction:column;min-height:26rem;padding:1.25rem;color:inherit;text-decoration:none;border:1px solid rgba(0,0,0,.16);background:linear-gradient(160deg,#f4cf65,#d6a62f);transition:transform .25s ease,box-shadow .25s ease}
+.featured-product-main{display:block;color:inherit;text-decoration:none}
+.featured-product-main img{display:block;width:100%;height:14rem;object-fit:contain;margin-bottom:1.2rem;background:rgba(255,255,255,.18)}
+.featured-product-price{font-size:1.2rem;font-weight:800;margin-top:.3rem}
+.featured-product-actions{display:grid;gap:.65rem;margin-top:1rem}
+.featured-product-actions .button{width:100%;cursor:pointer}
+.featured-product-actions .button:disabled{cursor:wait;opacity:.65}
+.featured-details{color:inherit;text-align:center;font-weight:700;text-decoration:underline}
 .featured-product:hover,.featured-product:focus-visible{transform:translateY(-6px);box-shadow:0 20px 45px rgba(0,0,0,.2)}
 .featured-product:nth-child(even){background:linear-gradient(160deg,#ef3d2f,#b91217);color:#fff}
 .product-image-placeholder{display:grid;place-items:center;min-height:14rem;margin-bottom:1.2rem;border:1px dashed currentColor;font-family:"Playfair Display",serif;font-size:3rem}
