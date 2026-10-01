@@ -2,7 +2,17 @@
 require __DIR__.'/shop-auth.php';
 require_once dirname(__DIR__).'/api/catalog-management.php';
 $error='';
-if($_SERVER['REQUEST_METHOD']==='POST'){
+if($_SERVER['REQUEST_METHOD']==='POST'&&isset($_POST['save_featured'])){
+    admin_csrf();$lock=shop_inventory_lock(true);
+    try{
+        $all=commerce_catalog();
+        $ids=array_values((array)($_POST['featured']??[]));
+        if(count($ids)!==4||count(array_unique($ids))!==4)throw new InvalidArgumentException('Choose four different products.');
+        foreach($ids as $id)if(!isset($all[$id])||empty($all[$id]['active']))throw new InvalidArgumentException('Featured products must be visible in the shop.');
+        shop_atomic_json(shop_storage().'/featured-products.json',$ids);
+        header('Location: products.php?featured_saved=1');exit;
+    }catch(Throwable $e){$error=$e instanceof InvalidArgumentException?$e->getMessage():'Could not save featured products.';}finally{fclose($lock);}
+}elseif($_SERVER['REQUEST_METHOD']==='POST'){
     admin_csrf();$lock=shop_inventory_lock(true);
     try{
         $all=commerce_catalog();$id=(string)($_POST['id']??'');
@@ -27,10 +37,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         header('Location: products.php?edit='.rawurlencode($id).'&saved=1');exit;
     }catch(Throwable $e){$error=$e instanceof InvalidArgumentException?$e->getMessage():'Could not save. Please try again.';}finally{fclose($lock);}
 }
-$lock=shop_inventory_lock();$all=commerce_catalog();$stock=shop_stock();fclose($lock);
+$lock=shop_inventory_lock();$all=commerce_catalog();$stock=shop_stock();$featured=shop_featured_products($all);fclose($lock);
 $id=(string)($_GET['edit']??'');$p=$all[$id]??null;
 ?><!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manage products</title><link rel="stylesheet" href="admin.css"><header><a href="orders.php">Orders</a><a href="products.php">Products</a><a href="index.php">Inquiries</a><a href="email-settings.php">Email settings</a></header><main><h1>Products & inventory</h1><p>Prices are USD. Enter packed weight in grams and the quantity currently available for sale. Orders, stock and uploaded images survive website deployments.</p><a class="button" href="?edit=new">Add product</a>
-<?php if($error):?><p role="alert"><?=esc($error)?></p><?php endif?><?php if(isset($_GET['saved'])):?><p role="status">Saved successfully.</p><?php endif?>
+<?php if($error):?><p role="alert"><?=esc($error)?></p><?php endif?><?php if(isset($_GET['saved'])):?><p role="status">Saved successfully.</p><?php endif?><?php if(isset($_GET['featured_saved'])):?><p role="status">Homepage featured products saved successfully.</p><?php endif?>
+<section class="featured-admin"><h2>Homepage featured products</h2><p>Choose the four products shown on the homepage. Their current image, name, description, price and stock status are pulled automatically from the product catalogue.</p><form method="post"><input type="hidden" name="csrf" value="<?=esc($_SESSION['csrf'])?>"><input type="hidden" name="save_featured" value="1"><?php for($slot=0;$slot<4;$slot++):?><label>Featured #<?=esc($slot+1)?><select name="featured[]" required><?php foreach($all as $pid=>$row):if(empty($row['active']))continue;?><option value="<?=esc($pid)?>" <?=$pid===($featured[$slot]??'')?'selected':''?>><?=esc($row['name'])?></option><?php endforeach?></select></label><?php endfor?><button type="submit">Save homepage products</button></form></section>
 <?php if($p||$id==='new'):?><form method="post" enctype="multipart/form-data"><input type="hidden" name="csrf" value="<?=esc($_SESSION['csrf'])?>"><input type="hidden" name="id" value="<?=esc($id)?>"><input type="hidden" name="version" value="<?=esc(hash('sha256',json_encode($p)))?>"><input type="hidden" name="previous_available" value="<?=esc($stock[$id]['available']??0)?>">
 <?php foreach(['name'=>'English name','name_fa'=>'Persian name','description'=>'English description','description_fa'=>'Persian description'] as $key=>$label):?><label><?=esc($label)?><textarea name="<?=esc($key)?>" dir="<?=$key==='name_fa'||$key==='description_fa'?'rtl':'ltr'?>" required maxlength="6000"><?=esc($p[$key]??'')?></textarea></label><?php endforeach?>
 <label>Category<select name="category"><?php foreach(['oils','jewelry','souvenirs'] as $cat):?><option <?=$cat===($p['category']??'')?'selected':''?>><?=esc($cat)?></option><?php endforeach?></select></label>
