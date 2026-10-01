@@ -36,12 +36,11 @@
       const main=document.createElement('a');main.className='featured-product-main';main.href='product.html?id='+encodeURIComponent(id);
       const img=document.createElement('img');img.src=p.images?.[0]||'';img.alt=lang==='fa'?p.name_fa:p.name;img.loading='lazy';
       const h3=document.createElement('h3');h3.textContent=lang==='fa'?p.name_fa:p.name;main.append(img,h3);
-      const desc=document.createElement('p');desc.textContent=lang==='fa'?p.description_fa:p.description;
       const price=document.createElement('span');price.className='featured-product-price';price.dir='ltr';price.textContent=money(p.usd_cents);
       const actions=document.createElement('div');actions.className='featured-product-actions';
       const buy=document.createElement('button');buy.className='button button-primary';buy.type='button';buy.disabled=p.stock_available<1;buy.textContent=p.stock_available<1?text('Out of stock','ناموجود'):text('Add to cart','افزودن به سبد');buy.onclick=()=>addProduct(id);
       const details=document.createElement('a');details.className='featured-details';details.href=main.href;details.textContent=text('View product','مشاهده محصول');
-      actions.append(buy,details);article.append(main,desc,price,actions);grid.append(article);
+      actions.append(buy,details);article.append(main,price,actions);grid.append(article);
     });
   }
   function renderItems(){const target=el('checkout-items');if(!target)return;target.replaceChildren();for(const [id,n] of Object.entries(cart)){const p=catalog.products[id];if(!p)continue;const row=document.createElement('div');row.className='checkout-item';const name=document.createElement('span');name.textContent=(lang==='fa'?p.name_fa:p.name)+' · '+money(p.usd_cents);const qty=document.createElement('input');qty.type='number';qty.min='1';qty.max=String(Math.min(25,p.stock_available));qty.value=n;qty.setAttribute('aria-label',text('Quantity','تعداد'));qty.addEventListener('change',()=>{const v=Number(qty.value);if(!Number.isInteger(v)||v<1||v>Math.min(25,p.stock_available)){qty.value=cart[id];return;}cart[id]=v;save();refreshQuote();});const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label',text('Remove product','حذف محصول'));remove.onclick=()=>{delete cart[id];save();renderItems();refreshQuote();};row.append(name,qty,remove);target.append(row);}}
