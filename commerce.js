@@ -26,6 +26,24 @@
   async function api(action,body) {const r=await fetch('api/commerce.php?action='+action,{credentials:'same-origin',cache:'no-store',...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,csrf:catalog.csrf})}:{})});let data;try{data=await r.json();}catch{throw Error('service_unavailable');}if(!r.ok)throw Error(data.error||'service_unavailable');return data;}
   function localize(){document.documentElement.lang=lang;document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.querySelectorAll('[data-en]').forEach(e=>{if(e.dataset[lang])e.textContent=e.dataset[lang];});}
   function productPrices(){document.querySelectorAll('[data-stock-product]').forEach(e=>{const p=catalog?.products[e.dataset.stockProduct];e.textContent=p&&p.stock_available<1?text('Out of stock','ناموجود'):'';});document.querySelectorAll('[data-buy-product]').forEach(b=>{const p=catalog?.products[b.dataset.buyProduct];b.disabled=!p||p.stock_available<1;});document.querySelectorAll('[data-usd-product]').forEach(e=>{const p=catalog?.products[e.dataset.usdProduct];e.textContent=p?money(p.usd_cents):text('Price temporarily unavailable','قیمت موقتاً در دسترس نیست');});}
+  function renderHomepageFeatured(){
+    const grid=document.getElementById('featuredProductGrid');if(!grid||!catalog)return;
+    grid.replaceChildren();
+    const ids=Array.isArray(catalog.featured)?catalog.featured.slice(0,4):[];
+    ids.forEach((id,index)=>{
+      const p=catalog.products[id];if(!p)return;
+      const article=document.createElement('article');article.className='featured-product reveal visible';
+      const main=document.createElement('a');main.className='featured-product-main';main.href='product.html?id='+encodeURIComponent(id);
+      const img=document.createElement('img');img.src=p.images?.[0]||'';img.alt=lang==='fa'?p.name_fa:p.name;img.loading='lazy';
+      const h3=document.createElement('h3');h3.textContent=lang==='fa'?p.name_fa:p.name;main.append(img,h3);
+      const desc=document.createElement('p');desc.textContent=lang==='fa'?p.description_fa:p.description;
+      const price=document.createElement('span');price.className='featured-product-price';price.dir='ltr';price.textContent=money(p.usd_cents);
+      const actions=document.createElement('div');actions.className='featured-product-actions';
+      const buy=document.createElement('button');buy.className='button button-primary';buy.type='button';buy.disabled=p.stock_available<1;buy.textContent=p.stock_available<1?text('Out of stock','ناموجود'):text('Add to cart','افزودن به سبد');buy.onclick=()=>addProduct(id);
+      const details=document.createElement('a');details.className='featured-details';details.href=main.href;details.textContent=text('View product','مشاهده محصول');
+      actions.append(buy,details);article.append(main,desc,price,actions);grid.append(article);
+    });
+  }
   function renderItems(){const target=el('checkout-items');if(!target)return;target.replaceChildren();for(const [id,n] of Object.entries(cart)){const p=catalog.products[id];if(!p)continue;const row=document.createElement('div');row.className='checkout-item';const name=document.createElement('span');name.textContent=(lang==='fa'?p.name_fa:p.name)+' · '+money(p.usd_cents);const qty=document.createElement('input');qty.type='number';qty.min='1';qty.max=String(Math.min(25,p.stock_available));qty.value=n;qty.setAttribute('aria-label',text('Quantity','تعداد'));qty.addEventListener('change',()=>{const v=Number(qty.value);if(!Number.isInteger(v)||v<1||v>Math.min(25,p.stock_available)){qty.value=cart[id];return;}cart[id]=v;save();refreshQuote();});const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label',text('Remove product','حذف محصول'));remove.onclick=()=>{delete cart[id];save();renderItems();refreshQuote();};row.append(name,qty,remove);target.append(row);}}
   function line(label,value,total=false){const row=document.createElement('div');row.className='checkout-line'+(total?' checkout-total':'');const a=document.createElement('span'),b=document.createElement('span');a.textContent=label;b.textContent=value;row.append(a,b);return row;}
   function showQuote(){const box=el('checkout-summary');if(!box)return;box.replaceChildren();if(!quote){box.textContent=text('Choose a destination to calculate shipping.','برای محاسبه ارسال، مقصد را انتخاب کنید.');return;}
@@ -39,10 +57,10 @@
   function addressRules(){const country=el('checkout-country').value,form=el('checkout-form');form.elements.state.required=['US','CA','AU'].includes(country);const p=form.elements.postal_code;p.pattern=({US:'[0-9]{5}(-[0-9]{4})?',CA:'[A-Za-z][0-9][A-Za-z] ?[0-9][A-Za-z][0-9]',AU:'[0-9]{4}'})[country]||'.*';p.title=({US:'12345 or 12345-6789',CA:'A1A 1A1',AU:'1234'})[country]||'';}
   function countries(){const select=el('checkout-country');if(!select)return;const current=select.value;select.replaceChildren();const placeholder=new Option(text('Choose a country','کشور را انتخاب کنید'),'');select.add(placeholder);const names=new Intl.DisplayNames([lang],{type:'region'});Object.keys(catalog.countries).map(code=>[code,names.of(code)]).sort((a,b)=>a[1].localeCompare(b[1],lang)).forEach(([code,name])=>select.add(new Option(name,code)));select.value=current;}
   async function init(){document.querySelectorAll('[data-checkout-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.checkoutLang;localStorage.setItem('su-lang',lang);localize();if(catalog){countries();renderItems();showQuote();views?.render();productPrices();}});
-    document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;productPrices();views?.render();}));
+    document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;productPrices();views?.render();renderHomepageFeatured();}));
     document.querySelectorAll('[data-buy-product]').forEach(b=>b.addEventListener('click',()=>{addProduct(b.dataset.buyProduct);}));
     localize();views=window.ShopViews?.({text,money,api,getCart:()=>cart,getCatalog:()=>catalog,saveCart:save,addProduct,getLang:()=>lang,message});views?.mount();
-    try{catalog=await api('catalog');cart=Object.fromEntries(Object.entries(cart).filter(([id])=>Object.hasOwn(catalog.products,id)));save();productPrices();views?.render();if(!el('checkout-form'))return;countries();renderItems();
+    try{catalog=await api('catalog');cart=Object.fromEntries(Object.entries(cart).filter(([id])=>Object.hasOwn(catalog.products,id)));save();productPrices();views?.render();renderHomepageFeatured();if(!el('checkout-form'))return;countries();renderItems();
       const form=el('checkout-form');let saved={};try{saved=JSON.parse(sessionStorage.getItem('su-delivery')||'{}');}catch{}
       for(const [k,v] of Object.entries(saved)){const f=form.elements.namedItem(k);if(f&&f.type!=='checkbox')f.value=v;}
       el('checkout-country').value=sessionStorage.getItem('su-country')||saved.country||'';el('checkout-region').value=sessionStorage.getItem('su-region')||saved.region||'mainland';
