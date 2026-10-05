@@ -8,5 +8,5 @@ $_SESSION['csrf']??=bin2hex(random_bytes(24));
 require_once dirname(__DIR__).'/api/commerce-lib.php';
 function esc($v): string{return htmlspecialchars((string)$v,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');}
 function admin_csrf(): void {
-    if(!hash_equals($_SESSION['csrf'],(string)($_POST['csrf']??''))){http_response_code(403);exit('Invalid request.');}
+    if(!hash_equals($_SESSION['csrf'],(string)($_POST['csrf']??''))){http_response_code(403);exit('בקשה לא תקינה. יש לרענן את העמוד ולנסות שוב.');}
 }
